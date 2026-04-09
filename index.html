@@ -14,6 +14,7 @@
       --border: #d9dee5;
       --dark: #0d1117;
       --dark-2: #161b22;
+      --dark-3: #222936;
       --accent: #b7bf2a;
       --accent-dark: #98a11f;
       --accent-soft: #eef2be;
@@ -21,11 +22,15 @@
       --active-border: #8eb6ff;
       --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       --radius: 16px;
-      --player-height: 118px;
+      --player-height: 150px;
     }
 
     * {
       box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -33,7 +38,7 @@
       font-family: "Segoe UI", Arial, sans-serif;
       background: linear-gradient(180deg, #f3f5f7 0%, #edf1f4 100%);
       color: var(--text);
-      padding-bottom: calc(var(--player-height) + 20px);
+      padding-bottom: calc(var(--player-height) + 24px);
     }
 
     .topbar {
@@ -139,6 +144,8 @@
       padding: 16px;
       position: sticky;
       top: 16px;
+      max-height: calc(100vh - 32px - var(--player-height));
+      overflow: auto;
     }
 
     .search-box {
@@ -206,6 +213,7 @@
     .content {
       padding: 24px;
       background: white;
+      min-height: 500px;
     }
 
     .now-playing {
@@ -237,6 +245,7 @@
       background: #eef2f5;
       border-radius: 18px;
       padding: 14px;
+      min-height: 220px;
     }
 
     .cover {
@@ -282,7 +291,7 @@
     }
 
     .btn-primary:hover {
-      background: #222936;
+      background: var(--dark-3);
       transform: translateY(-1px);
     }
 
@@ -319,10 +328,10 @@
       right: 0;
       bottom: 0;
       z-index: 999;
-      background: rgba(13, 17, 23, 0.96);
+      background: rgba(13, 17, 23, 0.97);
       color: white;
       border-top: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
       box-shadow: 0 -8px 24px rgba(0,0,0,0.25);
     }
 
@@ -332,7 +341,7 @@
       min-height: var(--player-height);
       padding: 14px 20px;
       display: grid;
-      grid-template-columns: 280px 1fr 170px;
+      grid-template-columns: 290px 1fr 130px;
       gap: 18px;
       align-items: center;
     }
@@ -351,6 +360,7 @@
       object-fit: cover;
       background: #2a3340;
       flex-shrink: 0;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
     }
 
     .player-meta {
@@ -382,34 +392,102 @@
     .player-controls {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 8px;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
     }
 
     .player-btn {
       padding: 10px 14px;
       border-radius: 999px;
       font-size: 0.95rem;
+      min-width: 46px;
+      min-height: 46px;
     }
 
     .player-btn-main {
       background: var(--accent);
       color: #111;
+      min-width: 58px;
+      min-height: 58px;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 18px rgba(183,191,42,0.25);
     }
 
     .player-btn-main:hover {
       background: var(--accent-dark);
     }
 
-    .player-audio {
+    .player-progress-wrap {
       width: 100%;
-      filter: none;
+    }
+
+    .player-progress-row {
+      display: grid;
+      grid-template-columns: 52px 1fr 52px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .time-label {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.75);
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-bar {
+      position: relative;
+      height: 8px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .progress-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 999px;
+    }
+
+    .progress-handle {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+      pointer-events: none;
     }
 
     .player-right {
-      text-align: right;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
       color: rgba(255,255,255,0.72);
       font-size: 0.9rem;
+      text-align: right;
+    }
+
+    .player-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(183,191,42,0.65);
+    }
+
+    .hidden-audio {
+      display: none;
     }
 
     @media (max-width: 1100px) {
@@ -422,13 +500,13 @@
       }
 
       .sticky-player-inner {
-        grid-template-columns: 240px 1fr 110px;
+        grid-template-columns: 240px 1fr 100px;
       }
     }
 
     @media (max-width: 920px) {
       :root {
-        --player-height: 175px;
+        --player-height: 200px;
       }
 
       .page {
@@ -441,6 +519,7 @@
 
       .sidebar {
         position: static;
+        max-height: none;
       }
 
       .content {
@@ -482,7 +561,7 @@
 
       .sticky-player-inner {
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 12px;
         align-items: stretch;
       }
 
@@ -491,13 +570,13 @@
       }
 
       .player-controls {
-        margin-bottom: 10px;
+        margin-bottom: 12px;
       }
     }
 
     @media (max-width: 560px) {
       :root {
-        --player-height: 190px;
+        --player-height: 220px;
       }
 
       .brand-title {
@@ -529,13 +608,18 @@
         width: 100%;
       }
 
-      .player-episode {
-        align-items: center;
-      }
-
       .player-cover {
         width: 54px;
         height: 54px;
+      }
+
+      .player-progress-row {
+        grid-template-columns: 46px 1fr 46px;
+        gap: 8px;
+      }
+
+      .time-label {
+        font-size: 0.76rem;
       }
     }
   </style>
@@ -589,18 +673,31 @@
 
       <div class="player-center">
         <div class="player-controls">
-          <button id="playerPrevBtn" class="player-btn btn-primary">⟵</button>
-          <button id="playerPlayBtn" class="player-btn player-btn-main">Toista</button>
-          <button id="playerNextBtn" class="player-btn btn-primary">⟶</button>
+          <button id="playerPrevBtn" class="player-btn btn-primary" title="Edellinen">⟵</button>
+          <button id="playerPlayBtn" class="player-btn player-btn-main" title="Toista tai pysäytä">▶</button>
+          <button id="playerNextBtn" class="player-btn btn-primary" title="Seuraava">⟶</button>
         </div>
-        <audio id="globalAudioPlayer" class="player-audio" controls>
+
+        <div class="player-progress-wrap">
+          <div class="player-progress-row">
+            <div id="currentTime" class="time-label">0:00</div>
+            <div id="progressBar" class="progress-bar">
+              <div id="progressFill" class="progress-fill"></div>
+              <div id="progressHandle" class="progress-handle"></div>
+            </div>
+            <div id="durationTime" class="time-label">0:00</div>
+          </div>
+        </div>
+
+        <audio id="globalAudioPlayer" class="hidden-audio" preload="metadata">
           <source id="globalAudioSource" src="" type="audio/mpeg">
           Selaimesi ei tue audioelementtiä.
         </audio>
       </div>
 
       <div class="player-right">
-        Johdatus tietotekniikkaan
+        <div class="player-status-dot"></div>
+        <div id="playerStatusText">Valmis</div>
       </div>
     </div>
   </div>
@@ -665,12 +762,20 @@
 
     const globalAudioPlayer = document.getElementById("globalAudioPlayer");
     const globalAudioSource = document.getElementById("globalAudioSource");
+
     const playerCover = document.getElementById("playerCover");
     const playerTitle = document.getElementById("playerTitle");
     const playerSubtitle = document.getElementById("playerSubtitle");
     const playerPrevBtn = document.getElementById("playerPrevBtn");
     const playerPlayBtn = document.getElementById("playerPlayBtn");
     const playerNextBtn = document.getElementById("playerNextBtn");
+    const playerStatusText = document.getElementById("playerStatusText");
+
+    const currentTimeEl = document.getElementById("currentTime");
+    const durationTimeEl = document.getElementById("durationTime");
+    const progressBar = document.getElementById("progressBar");
+    const progressFill = document.getElementById("progressFill");
+    const progressHandle = document.getElementById("progressHandle");
 
     let filteredEpisodes = [...episodes];
     let currentEpisodeIndex = -1;
@@ -681,6 +786,13 @@
 
     function getImageUrl(fileName) {
       return basePath + "pics/" + fileName + ".jpg";
+    }
+
+    function formatTime(seconds) {
+      if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, "0")}`;
     }
 
     function renderList() {
@@ -721,7 +833,7 @@
             class="cover"
             src="${imageUrl}"
             alt="${ep.title}"
-            onerror="this.style.display='none'"
+            onerror="this.onerror=null; this.src='logo.png';"
           >
         </div>
 
@@ -764,15 +876,23 @@
       playerSubtitle.textContent = ep.description;
       playerCover.src = imageUrl;
       playerCover.alt = ep.title;
+      playerCover.onerror = () => {
+        playerCover.onerror = null;
+        playerCover.src = "logo.png";
+      };
 
       if (globalAudioPlayer.dataset.currentFile !== ep.fileName) {
         globalAudioSource.src = audioUrl;
         globalAudioPlayer.load();
         globalAudioPlayer.dataset.currentFile = ep.fileName;
+        currentTimeEl.textContent = "0:00";
+        durationTimeEl.textContent = "0:00";
+        updateProgressUI(0, 0);
       }
 
       updatePlayerButtons();
       updatePlayButtonLabel();
+      updateStatusText();
     }
 
     function updatePlayerButtons() {
@@ -781,7 +901,23 @@
     }
 
     function updatePlayButtonLabel() {
-      playerPlayBtn.textContent = globalAudioPlayer.paused ? "Toista" : "Pysäytä";
+      playerPlayBtn.textContent = globalAudioPlayer.paused ? "▶" : "⏸";
+    }
+
+    function updateStatusText() {
+      if (currentEpisodeIndex < 0) {
+        playerStatusText.textContent = "Valmis";
+        return;
+      }
+      playerStatusText.textContent = globalAudioPlayer.paused ? "Tauolla" : "Toistetaan";
+    }
+
+    function updateProgressUI(current, duration) {
+      const percent = duration > 0 ? (current / duration) * 100 : 0;
+      progressFill.style.width = `${percent}%`;
+      progressHandle.style.left = `${percent}%`;
+      currentTimeEl.textContent = formatTime(current);
+      durationTimeEl.textContent = formatTime(duration);
     }
 
     function togglePlayPause() {
@@ -821,6 +957,16 @@
       renderList();
     }
 
+    function seekAudio(event) {
+      const rect = progressBar.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+
+      if (Number.isFinite(globalAudioPlayer.duration) && globalAudioPlayer.duration > 0) {
+        globalAudioPlayer.currentTime = ratio * globalAudioPlayer.duration;
+      }
+    }
+
     searchInput.addEventListener("input", applySearch);
 
     playerPrevBtn.addEventListener("click", () => {
@@ -836,15 +982,32 @@
     });
 
     playerPlayBtn.addEventListener("click", togglePlayPause);
+    progressBar.addEventListener("click", seekAudio);
 
-    globalAudioPlayer.addEventListener("play", updatePlayButtonLabel);
-    globalAudioPlayer.addEventListener("pause", updatePlayButtonLabel);
+    globalAudioPlayer.addEventListener("loadedmetadata", () => {
+      updateProgressUI(globalAudioPlayer.currentTime || 0, globalAudioPlayer.duration || 0);
+    });
+
+    globalAudioPlayer.addEventListener("timeupdate", () => {
+      updateProgressUI(globalAudioPlayer.currentTime || 0, globalAudioPlayer.duration || 0);
+    });
+
+    globalAudioPlayer.addEventListener("play", () => {
+      updatePlayButtonLabel();
+      updateStatusText();
+    });
+
+    globalAudioPlayer.addEventListener("pause", () => {
+      updatePlayButtonLabel();
+      updateStatusText();
+    });
 
     globalAudioPlayer.addEventListener("ended", () => {
       if (currentEpisodeIndex < episodes.length - 1) {
         selectEpisode(currentEpisodeIndex + 1, true);
       } else {
         updatePlayButtonLabel();
+        updateStatusText();
       }
     });
 
