@@ -3,155 +3,307 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Johdatus tietotekniikkaan – Podcastit</title>
+  <title>Tepon Mediakeittiö – Podcastit</title>
   <style>
+    :root {
+      --bg: #eef1f4;
+      --surface: #ffffff;
+      --surface-soft: #f7f8fa;
+      --text: #18202a;
+      --muted: #5f6b7a;
+      --border: #d9dee5;
+      --dark: #0d1117;
+      --dark-2: #161b22;
+      --accent: #b7bf2a;
+      --accent-dark: #98a11f;
+      --accent-soft: #eef2be;
+      --active: #e9f0ff;
+      --active-border: #8eb6ff;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --radius: 16px;
+    }
+
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f3f4f6;
-      color: #1f2937;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, #f3f5f7 0%, #edf1f4 100%);
+      color: var(--text);
     }
 
-    header {
-      background: linear-gradient(135deg, #111827, #1f2937);
+    .topbar {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
       color: white;
-      padding: 1.4rem 1rem;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      padding: 18px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-
-    .container {
+    .topbar-inner {
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
-      min-height: calc(100vh - 90px);
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      width: 68px;
+      height: 68px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    .brand-block {
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin: 0 0 6px 0;
+    }
+
+    .brand-subrow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-subtitle {
+      color: rgba(255,255,255,0.86);
+      font-size: 1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #111;
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 6px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.3px;
+    }
+
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(183,191,42,0.14), rgba(13,17,23,0.04));
+      border: 1px solid rgba(183,191,42,0.25);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h2 {
+      margin: 0 0 8px 0;
+      font-size: 1.4rem;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
     }
 
     .sidebar {
-      width: 34%;
-      background: white;
-      border-right: 1px solid #e5e7eb;
-      padding: 1rem;
-      overflow-y: auto;
-    }
-
-    .content {
-      width: 66%;
-      padding: 2rem;
+      padding: 16px;
+      position: sticky;
+      top: 16px;
     }
 
     .search-box {
-      margin-bottom: 1rem;
+      margin-bottom: 14px;
     }
 
     .search-box input {
       width: 100%;
-      padding: 0.8rem 0.9rem;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
       font-size: 1rem;
+      background: var(--surface-soft);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent-dark);
+      box-shadow: 0 0 0 4px rgba(183,191,42,0.18);
+      background: white;
+    }
+
+    .episode-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .episode {
-      padding: 0.9rem 0.8rem;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      margin-bottom: 0.7rem;
+      background: white;
+      border: 1px solid #e8ecf1;
+      border-radius: 14px;
+      padding: 14px;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
 
     .episode:hover {
-      background: #f9fafb;
-      border-color: #e5e7eb;
+      transform: translateY(-1px);
+      border-color: rgba(183,191,42,0.75);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      background: #fcfdf7;
     }
 
     .episode.active {
-      background: #eaf2ff;
-      border-color: #93c5fd;
+      background: var(--active);
+      border-color: var(--active-border);
+      box-shadow: 0 6px 18px rgba(80, 120, 220, 0.10);
     }
 
     .episode-title {
+      font-size: 1.05rem;
       font-weight: 700;
-      margin-bottom: 0.25rem;
       line-height: 1.3;
+      margin-bottom: 5px;
     }
 
     .episode-description {
-      color: #4b5563;
-      line-height: 1.4;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+
+    .content {
+      padding: 24px;
     }
 
     .now-playing {
-      display: inline-block;
-      margin-bottom: 1rem;
-      padding: 0.45rem 0.7rem;
-      background: #eef2ff;
-      color: #3730a3;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-soft);
+      color: #394100;
+      border: 1px solid rgba(183,191,42,0.45);
       border-radius: 999px;
+      padding: 8px 14px;
       font-weight: 700;
-      font-size: 0.92rem;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
     }
 
-.cover {
-  width: 100%;
-  max-width: 620px;
-  height: auto;
-  max-height: 360px;
-  object-fit: contain;
-  border-radius: 16px;
-  display: block;
-  margin-bottom: 1.2rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
-  background: #e5e7eb;
-}
-
-    .content h2 {
-      margin-top: 0.2rem;
-      font-size: 2rem;
-      line-height: 1.2;
+    .episode-heading {
+      margin: 0 0 12px 0;
+      font-size: 2.35rem;
+      line-height: 1.15;
+      color: #122033;
     }
 
-    .content p {
-      line-height: 1.6;
-      font-size: 1.05rem;
+    .cover-wrap {
+      margin: 16px 0 18px 0;
+    }
+
+    .cover {
+      width: 100%;
+      max-width: 760px;
+      height: auto;
+      max-height: 360px;
+      object-fit: contain;
+      border-radius: 18px;
+      display: block;
+      background: #e6ebf0;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.10);
+    }
+
+    .episode-text {
+      max-width: 850px;
+      color: #2a3441;
+      line-height: 1.7;
+      font-size: 1.08rem;
+      margin-bottom: 14px;
+    }
+
+    .player-card {
+      margin-top: 12px;
+      background: linear-gradient(180deg, #fbfcfd 0%, #f3f6f9 100%);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      max-width: 860px;
+    }
+
+    .player-label {
+      font-size: 0.95rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 10px;
     }
 
     audio {
       width: 100%;
-      max-width: 760px;
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+      margin-bottom: 14px;
     }
 
     .controls {
       display: flex;
-      gap: 0.7rem;
+      gap: 12px;
       flex-wrap: wrap;
-      margin-top: 0.6rem;
     }
 
     button {
       border: none;
-      border-radius: 10px;
-      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      padding: 12px 18px;
       cursor: pointer;
-      font-size: 0.98rem;
+      font-size: 1rem;
       font-weight: 700;
-      background: #1f2937;
-      color: white;
-      transition: 0.2s ease;
+      transition: background 0.2s ease, transform 0.15s ease, opacity 0.15s ease;
     }
 
-    button:hover {
-      opacity: 0.92;
+    .btn-primary {
+      background: var(--dark);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #222936;
+      transform: translateY(-1px);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #111;
+    }
+
+    .btn-accent:hover {
+      background: var(--accent-dark);
       transform: translateY(-1px);
     }
 
@@ -162,106 +314,199 @@
     }
 
     .empty-state {
-      color: #6b7280;
-      padding: 1rem 0.4rem;
+      color: var(--muted);
+      padding: 12px 4px;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 1100px) {
+      .layout {
+        grid-template-columns: 320px 1fr;
+      }
+
+      .episode-heading {
+        font-size: 2rem;
+      }
     }
 
     @media (max-width: 920px) {
-      .container {
-        flex-direction: column;
+      .page {
+        padding: 14px;
       }
 
-      .sidebar,
-      .content {
-        width: 100%;
+      .layout {
+        grid-template-columns: 1fr;
       }
 
       .sidebar {
-        border-right: none;
-        border-bottom: 1px solid #e5e7eb;
+        position: static;
       }
 
       .content {
-        padding: 1.2rem;
+        padding: 18px;
       }
 
-      .content h2 {
-        font-size: 1.6rem;
+      .episode-heading {
+        font-size: 1.75rem;
+      }
+
+      .cover {
+        max-height: 240px;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      .controls button {
+        width: 100%;
+      }
+
+      .topbar {
+        padding: 14px 16px;
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+      }
+
+      .logo {
+        width: 56px;
+        height: 56px;
+      }
+
+      .brand-title {
+        font-size: 1.45rem;
+      }
+
+      .brand-subtitle {
+        font-size: 0.95rem;
+      }
+
+      .hero h2 {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .brand-title {
+        font-size: 1.28rem;
+      }
+
+      .episode-title {
+        font-size: 1rem;
+      }
+
+      .episode-description,
+      .episode-text {
+        font-size: 0.97rem;
+      }
+
+      .episode-heading {
+        font-size: 1.5rem;
+      }
+
+      .cover {
+        max-height: 210px;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🎧 Johdatus tietotekniikkaan – Podcastit</h1>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <img src="logo.png" alt="Tepon Mediakeittiö logo" class="logo">
+      <div class="brand-block">
+        <h1 class="brand-title">Tepon Mediakeittiö</h1>
+        <div class="brand-subrow">
+          <div class="brand-subtitle">Podcastit, videot ja oppimisen herkut</div>
+          <span class="badge">Podcast</span>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <div class="container">
-    <aside class="sidebar">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Hae jaksoa...">
-      </div>
-      <div id="episodeList"></div>
-    </aside>
+  <div class="page">
+    <section class="hero panel">
+      <h2>Johdatus tietotekniikkaan – podcastit</h2>
+      <p>
+        Kuuntele jaksot helposti selaimessa. Sisältö tukee opiskelua ja tarjoaa
+        napakoita, ymmärrettäviä näkökulmia tietotekniikan perusaiheisiin.
+      </p>
+    </section>
 
-    <main class="content" id="episodeDetail">
-      <p>Valitse jakso listasta.</p>
-    </main>
+    <div class="layout">
+      <aside class="sidebar panel">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Hae jaksoa...">
+        </div>
+        <div class="episode-list" id="episodeList"></div>
+      </aside>
+
+      <main class="content panel" id="episodeDetail">
+        <p>Valitse jakso listasta.</p>
+      </main>
+    </div>
   </div>
 
   <script>
     const basePath = "https://centriafi.sharepoint.com/sites/teponmediakeittio/Media/PodPlayer/";
 
     const episodes = [
-  {
-    title: "Savitauluista tekoälyyn ja tulevaisuuteen",
-    fileName: "1_savitaulu",
-    description: "Tietotekniikan kehityksen pitkä kaari.",
-    longDescription: "Jakso käsittelee tietotekniikan kehitystä varhaisista ratkaisuista tekoälyn aikaan."
-  },
-  {
-    title: "Miksi tietokone tökkii ja miten se korjataan",
-    fileName: "2_tietokone",
-    description: "Yleisimmät syyt hitauteen.",
-    longDescription: "Jakso käy läpi tavallisimpia syitä hitauteen."
-  },
-  {
-    title: "Käyttöjärjestelmä on tietokoneen ydin",
-    fileName: "3_kayttis",
-    description: "Mikä käyttöjärjestelmä on.",
-    longDescription: "Jakso avaa käyttöjärjestelmän roolia."
-  },
-  {
-    title: "Koodauksen logiikka ja tekoäly apuna",
-    fileName: "4_koodaus",
-    description: "Ohjelmoinnin ajattelu.",
-    longDescription: "Jakso käsittelee ohjelmoinnin logiikkaa."
-  },
-  {
-    title: "Internet ei ole pilvessä vaan meren alla",
-    fileName: "5_internet",
-    description: "Verkon fyysinen todellisuus.",
-    longDescription: "Jakso käsittelee internetin rakennetta."
-  },
-  {
-    title: "Datan matka verkkokortista pilveen",
-    fileName: "6_data",
-    description: "Miten data liikkuu.",
-    longDescription: "Jakso selittää datan liikkumista."
-  },
-  {
-    title: "CIA ja tietoturva",
-    fileName: "7_cia",
-    description: "Tietoturvan periaatteet.",
-    longDescription: "Jakso käsittelee CIA-mallia."
-  },
-  {
-    title: "Tekoäly",
-    fileName: "8_tekoaly",
-    description: "AI perusteet.",
-    longDescription: "Jakso käsittelee tekoälyn perusideaa."
-  }
-];
+      {
+        title: "Savitauluista tekoälyyn ja tulevaisuuteen",
+        fileName: "1_savitaulu",
+        description: "Tietotekniikan kehityksen pitkä kaari.",
+        longDescription: "Jakso käsittelee tietotekniikan kehitystä varhaisista ratkaisuista tekoälyn aikaan."
+      },
+      {
+        title: "Miksi tietokone tökkii ja miten se korjataan",
+        fileName: "2_tietokone",
+        description: "Yleisimmät syyt hitauteen.",
+        longDescription: "Jakso käy läpi tavallisimpia syitä hitauteen sekä keinoja ongelmien ratkaisemiseksi."
+      },
+      {
+        title: "Käyttöjärjestelmä on tietokoneen ydin",
+        fileName: "3_kayttis",
+        description: "Mikä käyttöjärjestelmä oikeastaan on.",
+        longDescription: "Jakso avaa käyttöjärjestelmän roolia tietokoneen toiminnassa."
+      },
+      {
+        title: "Koodauksen logiikka ja tekoäly apuna",
+        fileName: "4_koodaus",
+        description: "Ohjelmoinnin ajattelua käytännössä.",
+        longDescription: "Jakso käsittelee ohjelmoinnin logiikkaa ja tekoälyn mahdollisuuksia oppimisen tukena."
+      },
+      {
+        title: "Internet ei ole pilvessä vaan meren alla",
+        fileName: "5_internet",
+        description: "Verkon fyysinen todellisuus.",
+        longDescription: "Jakso tarkastelee internetin fyysistä infrastruktuuria, yhteyksiä ja kaapeleita."
+      },
+      {
+        title: "Datan matka verkkokortista pilveen",
+        fileName: "6_data",
+        description: "Miten data liikkuu verkossa.",
+        longDescription: "Jakso selittää datan siirtymistä laitteelta verkon kautta palveluihin."
+      },
+      {
+        title: "CIA ja tietoturva",
+        fileName: "7_cia",
+        description: "Tietoturvan perusperiaatteet.",
+        longDescription: "Jakso käsittelee luottamuksellisuuden, eheyden ja saatavuuden merkitystä tietoturvassa."
+      },
+      {
+        title: "Tekoäly",
+        fileName: "8_tekoaly",
+        description: "AI perusteet.",
+        longDescription: "Jakso avaa tekoälyn perusideaa, käyttöä ja merkitystä nykypäivän työssä ja opiskelussa."
+      }
+    ];
 
     const searchInput = document.getElementById("searchInput");
     const listEl = document.getElementById("episodeList");
@@ -282,11 +527,11 @@
       listEl.innerHTML = "";
 
       if (filteredEpisodes.length === 0) {
-        listEl.innerHTML = `<div class="empty-state">Hakusanalla ei löytynyt jaksoja.</div>`;
+        listEl.innerHTML = '<div class="empty-state">Hakusanalla ei löytynyt jaksoja.</div>';
         return;
       }
 
-      filteredEpisodes.forEach((ep, index) => {
+      filteredEpisodes.forEach((ep) => {
         const originalIndex = episodes.findIndex(item => item.fileName === ep.fileName);
 
         const div = document.createElement("div");
@@ -311,21 +556,34 @@
 
       detailEl.innerHTML = `
         <div class="now-playing">🎧 Nyt toistetaan</div>
-        <h2>${ep.title}</h2>
-        <img
-          class="cover"
-          src="${imageUrl}"
-          alt="${ep.title}"
-          onerror="this.style.display='none'"
-        >
-        <p>${ep.longDescription}</p>
-        <audio id="audioPlayer" controls ${autoplay ? "autoplay" : ""}>
-          <source src="${audioUrl}" type="audio/mpeg">
-          Selaimesi ei tue audioelementtiä.
-        </audio>
-        <div class="controls">
-          <button id="prevBtn" ${prevDisabled}>⟵ Edellinen</button>
-          <button id="nextBtn" ${nextDisabled}>Seuraava ⟶</button>
+        <h2 class="episode-heading">${ep.title}</h2>
+
+        <div class="cover-wrap">
+          <img
+            class="cover"
+            src="${imageUrl}"
+            alt="${ep.title}"
+            onerror="this.style.display='none'"
+          >
+        </div>
+
+        <div class="episode-text">${ep.longDescription}</div>
+
+        <div class="player-card">
+          <div class="player-label">Kuuntele jakso</div>
+          <audio id="audioPlayer" controls ${autoplay ? "autoplay" : ""}>
+            <source src="${audioUrl}" type="audio/mpeg">
+            Selaimesi ei tue audioelementtiä.
+          </audio>
+
+          <div class="controls">
+            <button id="prevBtn" class="btn-primary" ${prevDisabled}>⟵ Edellinen</button>
+            <button id="nextBtn" class="btn-accent" ${nextDisabled}>Seuraava ⟶</button>
+          </div>
+        </div>
+
+        <div class="footer-note">
+          Tepon Mediakeittiö • Johdatus tietotekniikkaan
         </div>
       `;
 
