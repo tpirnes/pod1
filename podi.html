@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Johdatus tietotekniikkaan – Podcastit</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+
+    header {
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: white;
+      padding: 1.4rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .container {
+      display: flex;
+      min-height: calc(100vh - 90px);
+    }
+
+    .sidebar {
+      width: 34%;
+      background: white;
+      border-right: 1px solid #e5e7eb;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .content {
+      width: 66%;
+      padding: 2rem;
+    }
+
+    .search-box {
+      margin-bottom: 1rem;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .episode {
+      padding: 0.9rem 0.8rem;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      margin-bottom: 0.7rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .episode:hover {
+      background: #f9fafb;
+      border-color: #e5e7eb;
+    }
+
+    .episode.active {
+      background: #eaf2ff;
+      border-color: #93c5fd;
+    }
+
+    .episode-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      line-height: 1.3;
+    }
+
+    .episode-description {
+      color: #4b5563;
+      line-height: 1.4;
+    }
+
+    .now-playing {
+      display: inline-block;
+      margin-bottom: 1rem;
+      padding: 0.45rem 0.7rem;
+      background: #eef2ff;
+      color: #3730a3;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+.cover {
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  max-height: 360px;
+  object-fit: contain;
+  border-radius: 16px;
+  display: block;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  background: #e5e7eb;
+}
+
+    .content h2 {
+      margin-top: 0.2rem;
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+
+    .content p {
+      line-height: 1.6;
+      font-size: 1.05rem;
+    }
+
+    audio {
+      width: 100%;
+      max-width: 760px;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      margin-top: 0.6rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      cursor: pointer;
+      font-size: 0.98rem;
+      font-weight: 700;
+      background: #1f2937;
+      color: white;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .empty-state {
+      color: #6b7280;
+      padding: 1rem 0.4rem;
+    }
+
+    @media (max-width: 920px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar,
+      .content {
+        width: 100%;
+      }
+
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .content {
+        padding: 1.2rem;
+      }
+
+      .content h2 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎧 Johdatus tietotekniikkaan – Podcastit</h1>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Hae jaksoa...">
+      </div>
+      <div id="episodeList"></div>
+    </aside>
+
+    <main class="content" id="episodeDetail">
+      <p>Valitse jakso listasta.</p>
+    </main>
+  </div>
+
+  <script>
+    const basePath = "https://centriafi.sharepoint.com/sites/teponmediakeittio/Media/PodPlayer/";
+
+    const episodes = [
+  {
+    title: "Savitauluista tekoälyyn ja tulevaisuuteen",
+    fileName: "1_savitaulu",
+    description: "Tietotekniikan kehityksen pitkä kaari.",
+    longDescription: "Jakso käsittelee tietotekniikan kehitystä varhaisista ratkaisuista tekoälyn aikaan."
+  },
+  {
+    title: "Miksi tietokone tökkii ja miten se korjataan",
+    fileName: "2_tietokone",
+    description: "Yleisimmät syyt hitauteen.",
+    longDescription: "Jakso käy läpi tavallisimpia syitä hitauteen."
+  },
+  {
+    title: "Käyttöjärjestelmä on tietokoneen ydin",
+    fileName: "3_kayttis",
+    description: "Mikä käyttöjärjestelmä on.",
+    longDescription: "Jakso avaa käyttöjärjestelmän roolia."
+  },
+  {
+    title: "Koodauksen logiikka ja tekoäly apuna",
+    fileName: "4_koodaus",
+    description: "Ohjelmoinnin ajattelu.",
+    longDescription: "Jakso käsittelee ohjelmoinnin logiikkaa."
+  },
+  {
+    title: "Internet ei ole pilvessä vaan meren alla",
+    fileName: "5_internet",
+    description: "Verkon fyysinen todellisuus.",
+    longDescription: "Jakso käsittelee internetin rakennetta."
+  },
+  {
+    title: "Datan matka verkkokortista pilveen",
+    fileName: "6_data",
+    description: "Miten data liikkuu.",
+    longDescription: "Jakso selittää datan liikkumista."
+  },
+  {
+    title: "CIA ja tietoturva",
+    fileName: "7_cia",
+    description: "Tietoturvan periaatteet.",
+    longDescription: "Jakso käsittelee CIA-mallia."
+  },
+  {
+    title: "Tekoäly",
+    fileName: "8_tekoaly",
+    description: "AI perusteet.",
+    longDescription: "Jakso käsittelee tekoälyn perusideaa."
+  }
+];
+
+    const searchInput = document.getElementById("searchInput");
+    const listEl = document.getElementById("episodeList");
+    const detailEl = document.getElementById("episodeDetail");
+
+    let filteredEpisodes = [...episodes];
+    let currentEpisodeIndex = -1;
+
+    function getAudioUrl(fileName) {
+      return basePath + fileName + ".mp3";
+    }
+
+    function getImageUrl(fileName) {
+      return basePath + "pics/" + fileName + ".jpg";
+    }
+
+    function renderList() {
+      listEl.innerHTML = "";
+
+      if (filteredEpisodes.length === 0) {
+        listEl.innerHTML = `<div class="empty-state">Hakusanalla ei löytynyt jaksoja.</div>`;
+        return;
+      }
+
+      filteredEpisodes.forEach((ep, index) => {
+        const originalIndex = episodes.findIndex(item => item.fileName === ep.fileName);
+
+        const div = document.createElement("div");
+        div.className = "episode" + (originalIndex === currentEpisodeIndex ? " active" : "");
+        div.innerHTML = `
+          <div class="episode-title">${ep.title}</div>
+          <div class="episode-description">${ep.description}</div>
+        `;
+        div.onclick = () => showEpisodeByOriginalIndex(originalIndex);
+        listEl.appendChild(div);
+      });
+    }
+
+    function showEpisodeByOriginalIndex(index, autoplay = false) {
+      currentEpisodeIndex = index;
+      const ep = episodes[index];
+      const audioUrl = getAudioUrl(ep.fileName);
+      const imageUrl = getImageUrl(ep.fileName);
+
+      const prevDisabled = index === 0 ? "disabled" : "";
+      const nextDisabled = index === episodes.length - 1 ? "disabled" : "";
+
+      detailEl.innerHTML = `
+        <div class="now-playing">🎧 Nyt toistetaan</div>
+        <h2>${ep.title}</h2>
+        <img
+          class="cover"
+          src="${imageUrl}"
+          alt="${ep.title}"
+          onerror="this.style.display='none'"
+        >
+        <p>${ep.longDescription}</p>
+        <audio id="audioPlayer" controls ${autoplay ? "autoplay" : ""}>
+          <source src="${audioUrl}" type="audio/mpeg">
+          Selaimesi ei tue audioelementtiä.
+        </audio>
+        <div class="controls">
+          <button id="prevBtn" ${prevDisabled}>⟵ Edellinen</button>
+          <button id="nextBtn" ${nextDisabled}>Seuraava ⟶</button>
+        </div>
+      `;
+
+      const audioPlayer = document.getElementById("audioPlayer");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+
+      prevBtn.onclick = () => {
+        if (currentEpisodeIndex > 0) {
+          showEpisodeByOriginalIndex(currentEpisodeIndex - 1, true);
+        }
+      };
+
+      nextBtn.onclick = () => {
+        if (currentEpisodeIndex < episodes.length - 1) {
+          showEpisodeByOriginalIndex(currentEpisodeIndex + 1, true);
+        }
+      };
+
+      audioPlayer.onended = () => {
+        if (currentEpisodeIndex < episodes.length - 1) {
+          showEpisodeByOriginalIndex(currentEpisodeIndex + 1, true);
+        }
+      };
+
+      renderList();
+    }
+
+    function applySearch() {
+      const term = searchInput.value.trim().toLowerCase();
+
+      filteredEpisodes = episodes.filter(ep =>
+        ep.title.toLowerCase().includes(term) ||
+        ep.description.toLowerCase().includes(term) ||
+        ep.longDescription.toLowerCase().includes(term)
+      );
+
+      renderList();
+    }
+
+    searchInput.addEventListener("input", applySearch);
+
+    renderList();
+    showEpisodeByOriginalIndex(0);
+  </script>
+</body>
+</html>
