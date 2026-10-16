@@ -748,56 +748,54 @@
   </div>
 
   <script>
-    const basePath = "https://centriafi.sharepoint.com/sites/teponmediakeittio/Media/PodPlayer/";
-
     const episodes = [
       {
-        title: "Savitauluista tekoälyyn ja tulevaisuuteen",
-        fileName: "1_savitaulu",
-        description: "Tietotekniikan kehityksen pitkä kaari.",
-        longDescription: "Jakso käsittelee tietotekniikan kehitystä varhaisista ratkaisuista tekoälyn aikaan."
+        title: 'Savitaulusta älypuhelimeen ja tekoälyn aikakauteen',
+        fileName: '1_savitaulu',
+        description: 'Tietotekniikan kehityksen pitkä kaari.',
+        longDescription: 'Jakso käsittelee tietotekniikan kehitystä varhaisista ratkaisuista tekoälyn aikaan.'
       },
       {
-        title: "Miksi tietokone tökkii ja miten se korjataan",
-        fileName: "2_tietokone",
-        description: "Yleisimmät syyt hitauteen.",
-        longDescription: "Jakso käy läpi tavallisimpia syitä hitauteen sekä keinoja ongelmien ratkaisemiseksi."
+        title: 'Miksi tietokone tökkii ja miten se toimii',
+        fileName: '2_tietokone',
+        description: 'Yleisimmät syyt hitauteen.',
+        longDescription: 'Jakso käy läpi tavallisimpia syitä tietokoneen hitauteen ja sitä, miten kokonaisuus toimii.'
       },
       {
-        title: "Käyttöjärjestelmä on tietokoneen ydin",
-        fileName: "3_kayttis",
-        description: "Mikä käyttöjärjestelmä oikeastaan on.",
-        longDescription: "Jakso avaa käyttöjärjestelmän roolia tietokoneen toiminnassa."
+        title: 'Käyttöjärjestelmä on tietokoneen näkymätön orkesterinjohtaja',
+        fileName: '3_kayttis',
+        description: 'Mikä käyttöjärjestelmä oikeastaan on.',
+        longDescription: 'Jakso avaa käyttöjärjestelmän roolia tietokoneen toiminnassa.'
       },
       {
-        title: "Koodauksen logiikka ja tekoäly apuna",
-        fileName: "4_koodaus",
-        description: "Ohjelmoinnin ajattelua käytännössä.",
-        longDescription: "Jakso käsittelee ohjelmoinnin logiikkaa ja tekoälyn mahdollisuuksia oppimisen tukena."
+        title: 'Koodauksen logiikka ja tekoäly apukuskina',
+        fileName: '4_koodaus',
+        description: 'Ohjelmoinnin ajattelua käytännössä.',
+        longDescription: 'Jakso käsittelee ohjelmoinnin logiikkaa ja tekoälyn mahdollisuuksia oppimisen tukena.'
       },
       {
-        title: "Internet ei ole pilvessä vaan meren alla",
-        fileName: "5_internet",
-        description: "Verkon fyysinen todellisuus.",
-        longDescription: "Jakso tarkastelee internetin fyysistä infrastruktuuria, yhteyksiä ja kaapeleita."
+        title: 'Internet ei ole pilvessä vaan merenpohjassa',
+        fileName: '5_internet',
+        description: 'Verkon fyysinen todellisuus.',
+        longDescription: 'Jakso tarkastelee internetin fyysistä infrastruktuuria, yhteyksiä ja merenpohjan kaapeleita.'
       },
       {
-        title: "Datan matka verkkokortista pilveen",
-        fileName: "6_data",
-        description: "Miten data liikkuu verkossa.",
-        longDescription: "Jakso selittää datan siirtymistä laitteelta verkon kautta palveluihin."
+        title: 'Datan matka verkkokortista pilveen',
+        fileName: '6_data',
+        description: 'Miten data liikkuu verkossa.',
+        longDescription: 'Jakso selittää datan siirtymistä laitteelta verkon kautta palveluihin.'
       },
       {
-        title: "CIA ja tietoturva",
-        fileName: "7_cia",
-        description: "Tietoturvan perusperiaatteet.",
-        longDescription: "Jakso käsittelee luottamuksellisuuden, eheyden ja saatavuuden merkitystä tietoturvassa."
+        title: 'CIA-kolmio ja ihmismieli tietoturvan ytimessä',
+        fileName: '7_cia',
+        description: 'Tietoturvan perusperiaatteet.',
+        longDescription: 'Jakso käsittelee luottamuksellisuuden, eheyden ja saatavuuden merkitystä tietoturvassa.'
       },
       {
-        title: "Tekoäly",
-        fileName: "8_tekoaly",
-        description: "AI perusteet.",
-        longDescription: "Jakso avaa tekoälyn perusideaa, käyttöä ja merkitystä nykypäivän työssä ja opiskelussa."
+        title: 'Janoinen rauta ja tekoälyn inhimillinen vastuu',
+        fileName: '8_tekoaly',
+        description: 'Laitteiden energiankulutus ja tekoälyn vastuullinen käyttö.',
+        longDescription: 'Jakso nostaa esiin digitaalisen infrastruktuurin resurssitarpeet ja tekoälyn käytön vastuun.'
       }
     ];
 
@@ -826,11 +824,11 @@
     let currentEpisodeIndex = -1;
 
     function getAudioUrl(fileName) {
-      return basePath + fileName + ".mp3";
+      return `./audio/${fileName}.mp3`;
     }
 
     function getImageUrl(fileName) {
-      return basePath + "pics/" + fileName + ".jpg";
+      return "./logo.png";
     }
 
     function formatTime(seconds) {
